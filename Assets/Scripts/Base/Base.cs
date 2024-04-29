@@ -7,9 +7,9 @@ public class Base : MonoBehaviour
     [SerializeField] private ResourceSpawner _spawner;
     [SerializeField] private Unit[] _units;
 
-    private Queue<Unit> _unitsQueue;
-    private Queue<Resource> _avaibleResources;
-    private int _resources;
+    private readonly Queue<Resource> _avaibleResources = new();
+    private readonly Queue<Unit> _unitsQueue = new();
+    private int _resources = 0;
 
     public event Action<int> ResourcesAmountChanged;
 
@@ -45,10 +45,6 @@ public class Base : MonoBehaviour
 
     private void Awake()
     {
-        _resources = 0;
-        _avaibleResources = new Queue<Resource>();
-        _unitsQueue = new Queue<Unit>();
-
         foreach(Unit unit in _units)
         {
             unit.SetHome(this);
@@ -57,13 +53,20 @@ public class Base : MonoBehaviour
     }
 
     private void OnEnable()
+    {       
+        _spawner.ResourceSpawned += OnResourceSpawned;
+    }
+
+    private void Start()
     {
         ResourcesAmountChanged?.Invoke(_resources);
-        _spawner.ResourceSpawned += OnResourceSpawned;
     }
 
     private void OnResourceSpawned(Resource resource)
     {
+        if (resource == null)
+            return;
+
         _avaibleResources.Enqueue(resource);
         TrySetTarget();
     }

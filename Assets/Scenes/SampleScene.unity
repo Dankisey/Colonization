@@ -1122,7 +1122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prefab: {fileID: 8367382635723194096, guid: c04db607fa33a9543b78114c69ea445b, type: 3}
-  _spawnInterval: 2
+  _spawnInterval: 2.5
   _distance: 25
 --- !u!4 &1283652810
 Transform:

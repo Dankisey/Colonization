@@ -32,7 +32,6 @@ public class ResourceSpawner : MonoBehaviour
         Resource resource = _pool.Pull();
         _pool.SubscribeReturnEvent(resource);
         spot.SetResource(resource);
-
         ResourceSpawned?.Invoke(resource);
 
         return true;
@@ -44,9 +43,9 @@ public class ResourceSpawner : MonoBehaviour
 
         while (true)
         {
-            TrySpawn();
-
             yield return wait;
+
+            TrySpawn();
         }
     }
 
