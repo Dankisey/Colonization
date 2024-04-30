@@ -17,7 +17,8 @@ public class ResourceSpawner : MonoBehaviour
     private void Awake()
     {
         _spots = transform.GetComponentsInChildren<ResourceSpot>();
-        _pool = new ObjectPool<Resource>(_prefab).CreateStartPrefabs(_spots.Length);
+        _pool = new ObjectPool<Resource>(_prefab);
+        _pool.CreateStartPrefabs(_spots.Length);
         DoCircle();
         StartCoroutine(SpawningCycle());
     }

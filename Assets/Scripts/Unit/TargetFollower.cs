@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class TargetMover : MonoBehaviour
+public class TargetFollower : MonoBehaviour
 {
     [SerializeField][Range(0, 1)] private float _offset;
     [SerializeField] private float _speed;

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(TargetMover))]
+[RequireComponent(typeof(TargetFollower))]
 public class Unit : MonoBehaviour
 {
     [SerializeField] private CollectingArea _collectingArea;
@@ -9,28 +9,49 @@ public class Unit : MonoBehaviour
     private Base _base;
     private Resource _targetResource;
     private ItemHolder<Resource> _itemHolder;
-    private TargetMover _targetMover;
+    private TargetFollower _targetFollower;
 
     public bool HasItem { get; private set; } = false;
+
+    private void Awake()
+    {
+        _itemHolder = new ItemHolder<Resource>(_holdingPlace);
+        _targetFollower = GetComponent<TargetFollower>();
+    }
+
+    private void OnEnable()
+    {
+        _collectingArea.Found += OnFound;
+        _itemHolder.HasItemChanged += OnHasItemChanged;
+    }
+
+    private void OnDisable()
+    {
+        _collectingArea.Found -= OnFound;
+        _itemHolder.HasItemChanged -= OnHasItemChanged;
+    }
 
     public void SetHome(Base home)
     {
         _base = home;
     }
 
-    public void StoreResource()
+    public Resource StoreResource()
     {
         if (HasItem == false)
-            return;
+            return null;
 
-        _base.Deliver(_itemHolder.ReleaseItem());
-        _targetMover.ResetTarget();
+        Resource resource = _itemHolder.ReleaseItem();
+        _base.Deliver(resource);
+        _targetFollower.ResetTarget();
+
+        return resource;
     }
 
     public void SetTarget(Resource target)
     {
         _targetResource = target;
-        _targetMover.SetTarget(target.transform);
+        _targetFollower.SetTarget(target.transform);
     }
 
     private bool TryPickUp(Resource resource)
@@ -39,22 +60,11 @@ public class Unit : MonoBehaviour
             return false;
 
         _itemHolder.SetItem(resource);
-        _targetMover.SetTarget(_base.transform);
+        _targetFollower.SetTarget(_base.transform);
 
         return true;
     }
 
-    private void Awake()
-    {
-        _itemHolder = new ItemHolder<Resource>(_holdingPlace);
-        _targetMover = GetComponent<TargetMover>();
-    }
-
-    private void OnEnable()
-    {
-        _collectingArea.Found += OnFound;
-        _itemHolder.HasItemChanged += OnHasItemChanged;
-    }
 
     private void OnHasItemChanged(bool value)
     {
@@ -64,11 +74,5 @@ public class Unit : MonoBehaviour
     private void OnFound(Resource resource)
     {
         TryPickUp(resource);
-    }
-
-    private void OnDisable()
-    {
-        _collectingArea.Found -= OnFound;
-        _itemHolder.HasItemChanged -= OnHasItemChanged;
     }
 }

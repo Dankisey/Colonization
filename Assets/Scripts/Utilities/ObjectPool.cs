@@ -1,50 +1,43 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
-
-public class ObjectPool<T> where T : MonoBehaviour, IPoolableObject
+public class ObjectPool<T> where T : IPoolableObject
 {
-    private Queue<T> _prefabs;
-    private T _prefab;
+    private readonly Queue<IPoolableObject> _prefabs;
+    private readonly T _prefab;
 
     public ObjectPool(T prefab)
     {
-        _prefabs = new Queue<T>();
+        _prefabs = new Queue<IPoolableObject>();
         _prefab = prefab;
     }
 
-    public ObjectPool<T> CreateStartPrefabs(int amount)
+    public void CreateStartPrefabs(int amount)
     {
         for (int i = 0; i < amount; i++)
-        {
-            T prefab = GetNew();
-            Push(prefab);
-        }
-
-        return this;
+            Push(GetNew());
     }
 
     public T Pull()
     {
         if (_prefabs.Count == 0)
-            return GetNew();
+            return (T)GetNew();
 
-        T prefab = _prefabs.Dequeue();
-        prefab.gameObject.SetActive(true);
+        IPoolableObject prefab = _prefabs.Dequeue();
+        prefab.Enable();
 
-        return prefab;
+        return (T)prefab;
     }
 
-    public void Push(T obj)
+    public void Push(IPoolableObject obj)
     {
-        obj.gameObject.SetActive(false);
+        obj.Disable();
         _prefabs.Enqueue(obj);
     }
 
-    public void SubscribeReturnEvent(T parametr)
+    public void SubscribeReturnEvent(T obj)
     {
-        parametr.ReturnPoolEvent += OnReturnPoolEvent;
+        obj.ReturnPoolEvent += OnReturnPoolEvent;
     }
 
     private void OnReturnPoolEvent(IPoolableObject obj)
@@ -53,13 +46,19 @@ public class ObjectPool<T> where T : MonoBehaviour, IPoolableObject
         Push((T)obj);
     }
 
-    private T GetNew()
+    private IPoolableObject GetNew()
     {
-        return MonoBehaviour.Instantiate(_prefab);
+        return _prefab.Instantiate();
     }
 }
 
 public interface IPoolableObject
 {
     public event Action<IPoolableObject> ReturnPoolEvent;
+
+    public void Enable();
+
+    public void Disable();
+
+    public IPoolableObject Instantiate();
 }
