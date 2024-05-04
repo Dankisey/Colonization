@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3151209916253171046
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5140040966888906851}
+  m_Layer: 0
+  m_Name: SpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5140040966888906851
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3151209916253171046}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 718863557291854476}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5535379031693436706
 GameObject:
   m_ObjectHideFlags: 0
@@ -148,100 +179,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!1 &5981485023779932281
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 118779012496302999}
-  - component: {fileID: 3017195921671050742}
-  - component: {fileID: 6240138593942076450}
-  - component: {fileID: 93994151711985812}
-  m_Layer: 0
-  m_Name: InteractionArea
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &118779012496302999
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5981485023779932281}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 718863557291854476}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &3017195921671050742
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5981485023779932281}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 2
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!54 &6240138593942076450
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5981485023779932281}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &93994151711985812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5981485023779932281}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 920411dbcfc06c242b7fbe9fcf3945ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8591012369186277565
 GameObject:
   m_ObjectHideFlags: 0
@@ -360,6 +297,7 @@ GameObject:
   - component: {fileID: 5061825679990955176}
   - component: {fileID: 7696539379524441173}
   - component: {fileID: 1973048680622938186}
+  - component: {fileID: 2552801736909037935}
   m_Layer: 0
   m_Name: Base
   m_TagString: Untagged
@@ -380,8 +318,8 @@ Transform:
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 118779012496302999}
   - {fileID: 6508986690293229936}
+  - {fileID: 5140040966888906851}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6816144327502115832
@@ -467,11 +405,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb6dc72bf6abe1a4fbfec9c41d68ee0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _interactionArea: {fileID: 93994151711985812}
   _resourceChecker: {fileID: 5061825679990955176}
   _storage: {fileID: 7696539379524441173}
   _commander: {fileID: 1973048680622938186}
-  _units: []
+  _spawner: {fileID: 2552801736909037935}
+  _flagPrefab: {fileID: 1262118587420359533, guid: fe6bb23b781ee1348a760accccb89f43, type: 3}
+  _units:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  _baseCost: 5
 --- !u!114 &5061825679990955176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -484,7 +427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44e7e8e220dbbf34eb9e3f30f0b19be7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _searchingRadius: 50
+  _searchingRadius: 25
   _searchInterval: 1
 --- !u!114 &7696539379524441173
 MonoBehaviour:
@@ -510,3 +453,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f041b12467d54141b88736932feddfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2552801736909037935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8832482318818007727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8244117cfd53034f98c6f959c684a84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _storage: {fileID: 7696539379524441173}
+  _spawnPoint: {fileID: 5140040966888906851}
+  _prefab: {fileID: 6242399928670594520, guid: 42fb5185e60369e47bbae46a74add658, type: 3}
+  _unitCost: 3

@@ -8,10 +8,18 @@ public class UnitsCommander : MonoBehaviour
     private readonly List<Resource> _currentTargets = new();
     private readonly Queue<Unit> _avaibleUnits = new();
 
-    public void SetUnits(Unit[] units) 
+    private bool _IsBuildingBase = false;
+    private Flag _flag = null;
+
+    public void AddUnit(Unit unit) 
     {
-        foreach (Unit unit in units)
-            _avaibleUnits.Enqueue(unit);
+        _avaibleUnits.Enqueue(unit);
+    }
+
+    public void BuildBase(Flag flag)
+    {
+        _flag = flag;
+        _IsBuildingBase = true;
     }
 
     public void ReturnUnit(Unit unit)
@@ -20,7 +28,11 @@ public class UnitsCommander : MonoBehaviour
         _avaibleUnits.Enqueue(unit);
         _avaibleTargets.Remove(resource);
         _currentTargets.Remove(resource);
-        TrySetTarget();
+
+        if (_IsBuildingBase)
+            SendBuilder();
+        else
+            TrySetTarget();
     }
 
     public void AddTargets(Resource[] resources)
@@ -29,6 +41,13 @@ public class UnitsCommander : MonoBehaviour
             _avaibleTargets.Add(resource);
 
         TrySetTarget();
+    }
+
+    private void SendBuilder()
+    {
+        _avaibleUnits.Dequeue().SetTarget(_flag);
+        _IsBuildingBase = false;
+        _flag = null;
     }
 
     private bool TrySetTarget()

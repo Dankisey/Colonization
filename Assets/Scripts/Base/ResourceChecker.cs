@@ -12,15 +12,15 @@ public class ResourceChecker : MonoBehaviour
 
     public event Action<Resource[]> ResourcesFounded;
 
+    private void Start()
+    {
+        StartCoroutine(SearchingCycle());
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, _searchingRadius);
-    }
-
-    private void Start()
-    {
-        StartCoroutine(SearchingCycle());
     }
 
     private IEnumerator SearchingCycle()
@@ -36,7 +36,10 @@ public class ResourceChecker : MonoBehaviour
             foreach (Collider collider in colliders)
             {
                 if (collider.TryGetComponent(out Resource resource))
-                    _resources.Add(resource);
+                {
+                    if (resource.TryOccupy(out resource))
+                        _resources.Add(resource);  
+                }
             }
 
             if(_resources.Count > 0)

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class ResourceSpot : MonoBehaviour
@@ -6,17 +7,28 @@ public class ResourceSpot : MonoBehaviour
 
     public bool IsOccupied { get; private set; } = false;
 
+    public event Action<ResourceSpot> Destroyed;
+
+    private void OnDestroy()
+    {
+        if ( _resource != null )
+            _resource.ReturnConditionReached -= OnReturnConditionReached;
+
+        Destroyed?.Invoke(this);
+    }
+
     public void SetResource(Resource resource)
     {
         IsOccupied = true;       
         resource.transform.position = transform.position;
         _resource = resource;
-        _resource.ReturnPoolEvent += OnResourcePoolReturn;
+        _resource.ReturnConditionReached += OnReturnConditionReached;
     }
 
-    private void OnResourcePoolReturn(IPoolableObject poolableObject)
+    private void OnReturnConditionReached(IPoolableObject poolableObject)
     {
-        poolableObject.ReturnPoolEvent -= OnResourcePoolReturn;
+        _resource.ReturnConditionReached -= OnReturnConditionReached;
+        _resource = null;
         IsOccupied = false;
     }
 }

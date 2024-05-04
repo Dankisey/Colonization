@@ -3,11 +3,26 @@ using UnityEngine;
 
 public class Resource : MonoBehaviour, IPoolableObject
 {
-    public event Action<IPoolableObject> ReturnPoolEvent;
+    public bool IsOccupied { get; private set; } = false;
 
-    public IPoolableObject Instantiate()
+    public event Action<IPoolableObject> ReturnConditionReached;
+
+    public bool TryOccupy(out Resource resource)
     {
-        return Instantiate(this);
+        resource = null;
+
+        if (IsOccupied)
+            return false;
+
+        IsOccupied = true;
+        resource = this;
+
+        return true;
+    }
+
+    public IPoolableObject Instantiate(Vector3 position)
+    {
+        return Instantiate(this, position, Quaternion.identity);
     }
 
     public void Enable()
@@ -22,6 +37,12 @@ public class Resource : MonoBehaviour, IPoolableObject
 
     public void ReturnToPool()
     {
-        ReturnPoolEvent?.Invoke(this);
+        ReturnConditionReached?.Invoke(this);
+        IsOccupied = false;
+    }
+
+    public void SetPosition(Vector3 position)
+    {
+        gameObject.transform.position = position;
     }
 }

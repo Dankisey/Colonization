@@ -1,40 +1,44 @@
-using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class ResourceSpawner : MonoBehaviour
 {
-    [SerializeField] private Resource _prefab;
+    [Header("Requirements")]
+    [SerializeField] private Transform _firstBorderCorner;
+    [SerializeField] private Transform _secondBorderCorner;
+    [SerializeField] private Resource _resourcePrefab;
+    [SerializeField] private ResourceSpot _spotPrefab;
+
+    [Header("Settings")]
+    [SerializeField][Range(0f, 0.3f)] private float _randomizeOffset;
+    [SerializeField] private float _baseColliderOffset;
     [SerializeField] private float _spawnInterval;
-    [SerializeField] private float _distance;
+    [SerializeField] private int _maxSpots;
 
-    private ObjectPool<Resource> _pool;
-    private ResourceSpot[] _spots;
-
-    public event Action<Resource> ResourceSpawned;
+    private readonly List<ResourceSpot> _spots = new();
+    private ObjectPool<Resource> _resourcePool;
+    private PositionsHolder _positionsHolder;
 
     private void Awake()
     {
-        _spots = transform.GetComponentsInChildren<ResourceSpot>();
-        _pool = new ObjectPool<Resource>(_prefab);
-        _pool.CreateStartPrefabs(_spots.Length);
-        DoCircle();
+        _positionsHolder = new(_firstBorderCorner, _secondBorderCorner, _baseColliderOffset, _randomizeOffset);
+        _resourcePool = new ObjectPool<Resource>(_resourcePrefab);
+        Vector3 position = new(999, 999, 999); // random position to prevent detection on spawn
+        _resourcePool.SetSpawnPosition(position);
         StartCoroutine(SpawningCycle());
     }
 
     private bool TrySpawn()
     {
-        ResourceSpot spot = _spots.FirstOrDefault(point => point.IsOccupied == false);
-
-        if (spot == null)
+        if (TryGetSpot(out ResourceSpot spot) == false)
             return false;
-
-        Resource resource = _pool.Pull();
-        _pool.SubscribeReturnEvent(resource);
+        
+        Resource resource = _resourcePool.Pull();
+        _resourcePool.SubscribeReturnEvent(resource);
         spot.SetResource(resource);
-        ResourceSpawned?.Invoke(resource);
-
+        
         return true;
     }
 
@@ -50,20 +54,31 @@ public class ResourceSpawner : MonoBehaviour
         }
     }
 
-    private void DoCircle()
+    private bool TryGetSpot(out ResourceSpot spot)
     {
-        int points = _spots.Length;
-        float angleStep = 360 / points;
-        float currentAngle = 0;
-        float height = _spots[0].transform.position.y;
+        spot = _spots.FirstOrDefault(point => point.IsOccupied == false);
 
-        for (int i = 0; i < points; i++)
-        {
-            Vector3 newPosition = new(Mathf.Cos(currentAngle * Mathf.Deg2Rad), 0, Mathf.Sin(currentAngle * Mathf.Deg2Rad));
-            newPosition *= _distance;
-            newPosition.y = height;
-            _spots[i].transform.position = newPosition;
-            currentAngle += angleStep;
-        }
+        if (spot != null)        
+            return true;
+
+
+        if (_positionsHolder.TryGetRandomPosition(out Vector3 position) == false)
+            return false;
+
+        if (_spots.Count >= _maxSpots)
+            return false;
+        
+        spot = Instantiate(_spotPrefab);
+        spot.gameObject.transform.position = position;
+        spot.Destroyed += OnSpotDestroy;
+        _spots.Add(spot);
+
+        return true;
     }
+
+    private void OnSpotDestroy(ResourceSpot spot)
+    {
+        _spots.Remove(spot);
+        spot.Destroyed -= OnSpotDestroy;
+    }    
 }

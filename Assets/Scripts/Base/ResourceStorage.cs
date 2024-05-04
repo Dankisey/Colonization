@@ -18,4 +18,15 @@ public class ResourceStorage : MonoBehaviour
         ResourcesAmountChanged?.Invoke(_resources);
         resource.ReturnToPool();
     }
+
+    public bool TrySpend(int amount)
+    {
+        if (_resources - amount < 0)
+            return false;
+
+        _resources -= amount;
+        ResourcesAmountChanged?.Invoke(_resources);
+
+        return true;
+    }
 }
